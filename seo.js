@@ -1,9 +1,9 @@
 /* eslint-disable prettier/prettier */
 const fs = require('fs');
 const path = require('path');
+const appendTagId = 'app';
 const outputBasePath = path.join(__dirname, 'dist');
 const templatePath = path.join(__dirname, 'dist', 'index.html');
-const templateStr = fs.readFileSync(templatePath, 'utf8');
 
 // 定义数组对象
 const dataArray = [
@@ -31,7 +31,8 @@ const dataArray = [
   },
 ];
 
-// 遍历数组对象
+const appendTagRegex = new RegExp(`(id="${appendTagId}"[^>]*>)`);
+const templateStr = fs.readFileSync(templatePath, 'utf8');
 dataArray.forEach(data => {
   // 读取目标文件内容
   let fileContent = templateStr;
@@ -51,16 +52,17 @@ dataArray.forEach(data => {
     fileContent = fileContent.replace(/name="description"[^>]+/, `name="description" content="${data.description}">`);
   }
 
-  // 插入 img 标签
-  if (data.img) {
-    const imgTags = data.img.map(imgUrl => `<img src="${imgUrl}">`).join('');
-    fileContent = fileContent.replace('</body>', `${imgTags}</body>`);
-  }
-
   // 插入 content 标签
   if (data.content) {
     const contentTags = data.content.map(content => typeof content === 'object' ? `<${content.tag}>${content.text}</${content.tag}>` : `<div>${content}</div>`).join('');
-    fileContent = fileContent.replace('</body>', `${contentTags}</body>`);
+    fileContent = fileContent.replace(appendTagRegex, `$1${contentTags}`);
+  }
+
+
+  // 插入 img 标签
+  if (data.img) {
+    const imgTags = data.img.map(imgUrl => `<img src="${imgUrl}">`).join('');
+    fileContent = fileContent.replace(appendTagRegex, `$1${imgTags}`);
   }
 
   // 将修改后的内容写入目标文件
