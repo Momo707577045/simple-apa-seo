@@ -20,6 +20,7 @@ const dataArray = [
       tag: 'div',
       text: 'divContent',
     }],
+    html: '',
   },
   {
     path: 'm/ads-manager/create/google.html',
@@ -50,6 +51,11 @@ dataArray.forEach(data => {
   // 替换 meta name="description" 标签
   if (data.description) {
     fileContent = fileContent.replace(/name="description"[^>]+/, `name="description" content="${data.description}">`);
+  }
+
+  // 插入自定义 html 标签
+  if (data.html) {
+    fileContent = fileContent.replace(appendTagRegex, `$1${data.html}`);
   }
 
   // 插入 content 标签
