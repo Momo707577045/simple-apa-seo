@@ -1,28 +1,34 @@
 /* eslint-disable prettier/prettier */
 const fs = require('fs');
 const path = require('path');
-const appendTagId = 'app';
-const outputBasePath = path.join(__dirname, 'dist');
-const templatePath = path.join(__dirname, 'dist', 'index.html');
+const pageLinkNum = 3; // 自动生成页面间的超链接跳转的个数，设置为 0 则关闭该功能
+const appendTagId = 'app'; // 页面 seo 元素(超链接，图片，文字等)插入的容器 id
+const outputBasePath = path.join(__dirname, 'dist'); // 新建的 seo 入口文件，放在那个文件夹下
+const templatePath = path.join(__dirname, 'dist', 'index.html'); // 以那个文件作为模版，一般是 spa 项目的 index.html 文件
 
 // 定义数组对象
-const dataArray = [
+const pageConfigs = [
   {
-    path: '/tool-show/m3u8-downloader/index.html',
-    title: 'm3u8 downloader',
-    keywords: "m3u8 下载工具,毛静文的博客,Momo's Blog",
-    description: '无需后端支持，一个页面即可完成 m3u8 视频下载，遍历下载 ts 碎片，完成 ts 碎片文件整合，生成完整视频文件。',
-    img: [
+    path: '/m3u8-downloader/index.html', // 访问链接
+    title: 'm3u8 downloader', // 页面标题
+    keywords: "m3u8 下载工具,毛静文的博客,Momo's Blog", // 页面关键字
+    description: '无需后端支持，一个页面即可完成 m3u8 视频下载，遍历下载 ts 碎片，完成 ts 碎片文件整合，生成完整视频文件。', // 页面描述
+    img: [ // 自定插入的图片
       'https://upyun.luckly-mjw.cn/Assets/blog/m3u8-downloader-121-75.jpeg',
       'https://upyun.luckly-mjw.cn/Assets/blog/m3u8-downloader.jpeg'
     ],
-    content: [{
+    link: [{ // 自定义超链接跳转
+      text: '点击这里跳转',
+      href: '/tool-show/nginx-online-config-debug/index.html',
+    }],
+    content: [{ // 自定义插入的标签
       tag: 'h1',
       text: '特大视频原格式下载，边下载边保存，彻底解决大文件下载内存不足问题',
     }, {
       tag: 'div',
       text: '推荐一个 m3u8 网页版提取工具，无需下载软件，打开网站即可下载，自动检测，一键下载。',
     }],
+    // 自定义插入的 html
     html: `
     页面加载中，请耐心等待...
     <h1 style="white-space: pre;">
@@ -60,7 +66,7 @@ const dataArray = [
 `,
   },
   {
-    path: '/tool-show/github-directory-downloader/index.html',
+    path: '/tool-show/github-directory-downloader',
     title: 'GitHub directory downloader',
     keywords: "GitHub directory for web",
     description: "GitHub directory downloader for web, Momo's Blog, LuckyMomo",
@@ -109,12 +115,40 @@ iconfont web 在线预览工具，无需安装，打开即用。
 也支持预览 阿里iconfont 中的三种模式，unicode，Font class，Symbol。根据在线字体链接即可解析预览其定义的所有icon。
 `,
   },
-  
+  {
+    path: '/spa-seo-test/seo',
+    title: 'Simple SPA SEO',
+    keywords: "Simple SPA SEO,低成本单页应用 SEO",
+    description: "Simple SPA SEO,低成本单页应用 SEO,一键生成 SEO 关键页面关键元素",
+    img: [
+      'https://upyun.luckly-mjw.cn/Assets/blog/simple-spa-seo.png',
+    ],
+    content: [{
+      tag: 'h1',
+      text: '单页应用 SEO',
+    }, {
+      tag: 'div',
+      text: '请选择字体文件源',
+    }],
+  },
 ];
+
+// 生成页面间随机页面跳转
+pageLinkNum && pageConfigs.forEach(config => {
+  config.link = config.link || [];
+  const pageLinks = [...pageConfigs];
+  for (let index = 0; index < Math.min(pageConfigs.length, pageLinkNum); index++) {
+    const pageConfig = pageLinks.splice(Math.floor(Math.random() * pageLinks.length), 1)[0];
+    config.link.push({ // 自定义插入的标签
+      text: pageConfig.title || pageConfig.keywords || pageConfig.description,
+      href: pageConfig.path,
+    })
+  }
+})
 
 const appendTagRegex = new RegExp(`(id="${appendTagId}"[^>]*>)`);
 const templateStr = fs.readFileSync(templatePath, 'utf8');
-dataArray.forEach(data => {
+pageConfigs.forEach(data => {
   // 读取目标文件内容
   let fileContent = templateStr;
 
@@ -135,19 +169,24 @@ dataArray.forEach(data => {
 
   // 插入自定义 html 标签
   if (data.html) {
-    fileContent = fileContent.replace(appendTagRegex, `$1${data.html}`);
+    fileContent = fileContent.replace(appendTagRegex, `$1\n${data.html}`);
   }
 
   // 插入 content 标签
   if (data.content) {
-    const contentTags = data.content.map(content => typeof content === 'object' ? `<${content.tag}>${content.text}</${content.tag}>` : `<div>${content}</div>`).join('');
+    const contentTags = data.content.map(contentConf => typeof contentConf === 'object' ? `\n<${contentConf.tag}>${contentConf.text}</${contentConf.tag}>` : `\n<div>${content}</div>`).join('');
     fileContent = fileContent.replace(appendTagRegex, `$1${contentTags}`);
   }
 
+  // 插入 a 标签，设置超链接跳转
+  if (data.link) {
+    const aTags = data.link.map(linkConf => `\n<a target="_blank" href="${linkConf.href}">${linkConf.text}</a>`).join('');
+    fileContent = fileContent.replace(appendTagRegex, `$1${aTags}`);
+  }
 
   // 插入 img 标签
   if (data.img) {
-    const imgTags = data.img.map(imgUrl => `<img src="${imgUrl}">`).join('');
+    const imgTags = data.img.map(imgUrl => `\n<img src="${imgUrl}"/>`).join('');
     fileContent = fileContent.replace(appendTagRegex, `$1${imgTags}`);
   }
 
@@ -156,5 +195,5 @@ dataArray.forEach(data => {
   fs.mkdirSync(targetPath.substring(0, targetPath.lastIndexOf('/')), { recursive: true });
   fs.writeFileSync(targetPath, fileContent, 'utf8');
 
-  console.log(`File generated at ${targetPath}`);
+  console.log(`SEO 入口文件生成：${targetPath}`);
 });
