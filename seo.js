@@ -6,29 +6,52 @@ const appendTagId = 'app'; // 页面 seo 元素(超链接，图片，文字等)�
 const outputBasePath = path.join(__dirname, 'dist'); // 新建的 seo 入口文件，放在那个文件夹下
 const templatePath = path.join(__dirname, 'dist', 'index.html'); // 以那个文件作为模版，一般是 spa 项目的 index.html 文件
 
+// SEO 参考资料：https://github.com/madawei2699/awesome-seo/blob/main/README_CN.md
+
 // 定义数组对象
 const pageConfigs = [
   {
+    // 参考资料：https://developers.google.com/search/docs/crawling-indexing/url-structure?hl=zh-cn
     path: '/m3u8-downloader/index.html', // 访问链接
-    title: 'm3u8 downloader', // 页面标题
-    keywords: "m3u8 下载工具,毛静文的博客,Momo's Blog", // 页面关键字
+
+    // 页面标题：搜索引擎通常显示页面标题的前 55 至 60 个字符，超出此范围的文本可能会丢失
+    // 参考资料：https://developers.google.com/search/docs/appearance/title-link?hl=zh-cn
+    // 参考资料：https://developer.mozilla.org/en-US/docs/Web/HTML/Element/title#page_titles_and_seo
+    title: 'm3u8 downloader',
+
+    // 页面关键字，google 已经弃用该字段
+    // https://zhuanlan.zhihu.com/p/382454488
+    // https://developers.google.com/search/docs/crawling-indexing/special-tags?hl=zh-cn
+    keywords: "m3u8 下载工具,毛静文的博客,Momo's Blog",
+
+    // 页面摘要
+    // https://developers.google.com/search/docs/appearance/snippet?hl=zh-cn
     description: '无需后端支持，一个页面即可完成 m3u8 视频下载，遍历下载 ts 碎片，完成 ts 碎片文件整合，生成完整视频文件。', // 页面描述
-    img: [ // 自定插入的图片
+
+    // 自定插入的图片
+    img: [
       'https://upyun.luckly-mjw.cn/Assets/blog/m3u8-downloader-121-75.jpeg',
       'https://upyun.luckly-mjw.cn/Assets/blog/m3u8-downloader.jpeg'
     ],
-    link: [{ // 自定义超链接跳转
+
+    // 自定义超链接跳转
+    // 参考资料：https://developers.google.com/search/docs/appearance/sitelinks?hl=zh-cn
+    link: [{
       text: '点击这里跳转',
       href: '/tool-show/nginx-online-config-debug/index.html',
     }],
-    content: [{ // 自定义插入的标签
+
+    // 自定义插入的标签
+    content: [{
       tag: 'h1',
       text: '特大视频原格式下载，边下载边保存，彻底解决大文件下载内存不足问题',
     }, {
       tag: 'div',
       text: '推荐一个 m3u8 网页版提取工具，无需下载软件，打开网站即可下载，自动检测，一键下载。',
     }],
+
     // 自定义插入的 html
+    // 参考资料：https://zhuanlan.zhihu.com/p/391844443
     html: `
     页面加载中，请耐心等待...
     <h1 style="white-space: pre;">
