@@ -25,7 +25,7 @@
 - 【pageLinkNum】自动生成页面间的超链接跳转，实现页面间关联效果，设置为 0 则关闭该功能
 ![](http://upyun.luckly-mjw.cn/Assets/simple-apa-seo/001.png)
 
-- 【path】需要对外暴露的路径，脚本将自动在相对路径生成对应入口文件。注意，无需刻意携带文件后缀，浏览器会自动尝试解析文件，解析到`<!DOCTYPE html>`为 html
+- 【path】需要对外暴露的路径，脚本将自动在相对路径生成对应入口文件。注意，无需刻意携带文件后缀，通过后文 nginx 的一行配置，可将无后缀文件统一以 html 文件类型返回。让浏览器正常解析。
 ![](http://upyun.luckly-mjw.cn/Assets/simple-apa-seo/006.png)
 
 - 【title】指定页面的 title，`<title>m3u8 downloader</title>`
@@ -85,17 +85,18 @@
 
 ### 用法
 
-- 配置修改
+- 拷贝项目的 seo.js 文件，修改配置项
 ![](http://upyun.luckly-mjw.cn/Assets/simple-apa-seo/008.png)
-
 
 - 执行脚本，`node seo.js`
 ![](http://upyun.luckly-mjw.cn/Assets/simple-apa-seo/006.png)
 
-
 - 集成 package script
 ![](http://upyun.luckly-mjw.cn/Assets/simple-apa-seo/009.png)
 ![](http://upyun.luckly-mjw.cn/Assets/simple-apa-seo/002.png)
+
+- 添加 nginx 配置，`default_type text/html;` 使无后缀文件以 html 类型返回
+![](http://upyun.luckly-mjw.cn/Assets/simple-apa-seo/015.png)
 
 
 ### [源代码](https://github.com/Momo707577045/simple-apa-seo/blob/main/seo.js)
