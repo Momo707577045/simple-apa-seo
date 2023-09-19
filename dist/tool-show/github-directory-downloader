@@ -1,40 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <link rel="icon" href="/favicon.ico">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="keywords" content="GitHub directory for web">>
-  <meta name="description" content="GitHub directory downloader for web, Momo's Blog, LuckyMomo">>
-  <title>GitHub directory downloader</title>
-  <script type="module" crossorigin src="/assets/index-f7c26661.js"></script>
-  <link rel="stylesheet" href="/assets/index-9f680dd7.css">
-</head>
-
-<body>
-  <div id="app">
-    <img src="https://upyun.luckly-mjw.cn/Assets/blog/github-directory-downloader.png" />
-    <a target="_blank" href="/m3u8-downloader/index.html">m3u8 downloader</a>
-    <a target="_blank" href="/spa-seo-test/seo">Simple SPA SEO</a>
-    <a target="_blank" href="/tool-show/github-directory-downloader">GitHub directory downloader</a>
-    <h1>测试链接：https://github.com/Momo707577045/m3u8-downloader/tree/master/imgs</h1>
-    <div>支持特定分支，特定 tags 下的文件夹或具体文件，解决 GitHub 只能下载整个项目的问题。直接拷贝当前页面链接至本页面，点击下载</div>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="GitHub directory for web">
+    <meta name="description" content="GitHub directory downloader for web, Momo's Blog, LuckyMomo">
+    <title>GitHub directory downloader</title>
+    <script type="module" crossorigin src="/assets/index-f7c26661.js"></script>
+    <link rel="stylesheet" href="/assets/index-9f680dd7.css">
+  </head>
+  <body>
+    <div id="app">
+<img src="https://upyun.luckly-mjw.cn/Assets/blog/github-directory-downloader.png"/>
+<a target="_blank" href="/spa-seo-test/seo">Simple SPA SEO</a>
+<a target="_blank" href="/tool-show/nginx-online-config-debug/index.html">Nginx Online Debug</a>
+<a target="_blank" href="/tool-show/github-directory-downloader">GitHub directory downloader</a>
+<h1>测试链接：https://github.com/Momo707577045/m3u8-downloader/tree/master/imgs</h1>
+<div>支持特定分支，特定 tags 下的文件夹或具体文件，解决 GitHub 只能下载整个项目的问题。直接拷贝当前页面链接至本页面，点击下载</div>
 
     <div class="m-p-retry" v-if="errorNum && downloadIndex >= fileInfoList.length" @click="retryAll">重新下载错误文件</div>
     <div class="m-p-force" v-if="finishNum" @click="forceDownload">强制下载现有文件</div>
-    <div class="m-p-tips">碎片总量：{{ fileInfoList.length }}，已下载：{{ finishNum }}，错误：{{ errorNum }}，进度：{{ (finishNum /
-      fileInfoList.length * 100).toFixed(2) }}%</div>
+    <div class="m-p-tips">碎片总量：{{ fileInfoList.length }}，已下载：{{ finishNum }}，错误：{{ errorNum }}，进度：{{ (finishNum / fileInfoList.length * 100).toFixed(2) }}%</div>
     <div class="m-p-tips">若某视频碎片下载发生错误，将标记为红色，可点击相应图标进行重试</div>
     <section class="m-p-segment">
-      <div class="item" v-for="(item, index) in fileInfoList" :class="[item.status]" @click="retry(index)"
-        :title="item.path">
+      <div class="item" v-for="(item, index) in fileInfoList" :class="[item.status]" @click="retry(index)" :title="item.path">
         <div class="status"></div>
         <div class="content"><span>{{ index + 1 }}</span> {{ item.absoluteUrl }}</div>
       </div>
     </section>
-  </div>
-
-</body>
-
+</div>
+    
+  </body>
 </html>

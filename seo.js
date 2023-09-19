@@ -1,14 +1,14 @@
 /* eslint-disable prettier/prettier */
 const fs = require('fs');
 const path = require('path');
-const pageLinkNum = 3; // 自动生成页面间的超链接跳转的个数，设置为 0 则关闭该功能
-const appendTagId = 'app'; // 页面 seo 元素(超链接，图片，文字等)插入的容器 id
-const outputBasePath = path.join(__dirname, 'dist'); // 新建的 seo 入口文件，放在那个文件夹下
-const templatePath = path.join(__dirname, 'dist', 'index.html'); // 以那个文件作为模版，一般是 spa 项目的 index.html 文件
+const pageLinkNum = 3; // 【配置项】自动生成页面间的超链接跳转的个数，设置为 0 则关闭该功能
+const appendTagId = 'app'; // 【配置项】页面 seo 元素(超链接，图片，文字等)插入的容器 id
+const outputBasePath = path.join(__dirname, 'dist'); // 【配置项】新建的 seo 入口文件，放在那个文件夹下
+const templatePath = path.join(__dirname, 'dist', 'index.html'); // 【配置项】以那个文件作为模版，一般是 spa 项目的 index.html 文件
 
 // SEO 参考资料：https://github.com/madawei2699/awesome-seo/blob/main/README_CN.md
 
-// 定义数组对象
+// 【配置项】定义数组对象
 const pageConfigs = [
   {
     // 参考资料：https://developers.google.com/search/docs/crawling-indexing/url-structure?hl=zh-cn
